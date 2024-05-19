@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const chats = require("./data");
+const { chats } = require("./data");
+const dotenv = require("dotenv")
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+dotenv.config();
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 
