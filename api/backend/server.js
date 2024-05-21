@@ -4,10 +4,12 @@ const jwt = require("jsonwebtoken");
 const { chats } = require("./data");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes")
 
 const app = express();
 dotenv.config();
 connectDB();
+
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
@@ -39,6 +41,8 @@ app.get("/", (req, res) => {
 app.get("/api/chat", (req, res) => {
   res.json(chats);
 });
+
+app.use("/api/user", userRoutes)
 
 app.get("/auth/userName/:userName/pswd/:pswd", (req, res) => {
   if (verify_login(req.params.userName, req.params.pswd)) {
