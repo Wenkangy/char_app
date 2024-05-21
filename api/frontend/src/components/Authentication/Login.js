@@ -4,26 +4,26 @@ import React, { useState } from 'react';
 const Login = () => {
     const [show, setshow] = useState(false);
  
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [L_email, setEmail] = useState('');
+    const [L_password, setPassword] = useState('');
     const  handleShowClick = () => setshow(!show);
   return (
     <VStack spacing='5px'>
-    <FormControl id ="email" is isRequired>
+    <FormControl id ="L_email" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
             placeholder='Enter your Email'
-            value={email}
+            value={L_email}
             onChange={(e) => setEmail(e.target.value)}
         />
     </FormControl>
-    <FormControl id ="password" is isRequired>
+    <FormControl id ="L_password" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup>
             <Input
                 placeholder='Enter your Password'
                 type={show ? "text" : "password"}
-                value={password}
+                value={L_password}
                 onChange={(e) => setPassword(e.target.value)}
             />
             <InputRightElement width = "4.5rem">

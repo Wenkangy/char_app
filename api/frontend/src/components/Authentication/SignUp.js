@@ -1,4 +1,5 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react'
 import React, { useState } from 'react';
 
 const SignUp = () => {
@@ -9,14 +10,84 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [pic, setPic] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const toast = useToast()
 
     const  handleShowClick = () => setshow(!show);
     const  handleConfimClick = () => setshowC(!showC);
-    const  postDetails = (pic) => {};
+    const  postDetails = (pics) => {
+        setLoading(true);
+        if(pics === undefined){
+            toast({
+                title: 'Account created.',
+                description: "We've created your account for you.",
+                status:'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom'
+              });
+              return;
+        }
+        if (pics.type === "image/jpeg" || pics.type === "image/png") {
+            const data = new FormData();
+            data.append("file", pics);
+            data.append("upload_preset", "chat-app");
+            data.append("cloud_name", "piyushproj");
+            fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
+              method: "post",
+              body: data,
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                setPic(data.url.toString());
+                console.log(data.url.toString());
+                setLoading(false);
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+              });
+          } else {
+            toast({
+              title: "Please Select an Image!",
+              status: "warning",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom",
+            });
+            setLoading(false);
+            return;
+          }
+    };
+
+    const SubmitHandler = () =>{
+        setLoading(true);
+        if(!name || !email || !password || !confirmPassword){
+            toast({
+                title: 'Please Fill all the fields',
+                status:'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom'
+              });
+              setLoading(false)
+              return;
+            }
+        if(password !== confirmPassword){
+            toast({
+                title: 'Password Do not match',
+                status:'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom'
+                });
+                return;
+        }
+    };
     
     return (
         <VStack spacing='5px'>
-            <FormControl id ="firts-name" is isRequired>
+            <FormControl id ="firts-name" isRequired>
                 <FormLabel>Name</FormLabel>
                 <Input
                     placeholder='Enter your Name'
@@ -24,7 +95,7 @@ const SignUp = () => {
                     onChange={(e) => setName(e.target.value)}
                 />
             </FormControl>
-            <FormControl id ="email" is isRequired>
+            <FormControl id ="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
                     placeholder='Enter your Email'
@@ -32,7 +103,7 @@ const SignUp = () => {
                     onChange={(e) => setEmail(e.target.value)}
                 />
             </FormControl>
-            <FormControl id ="password" is isRequired>
+            <FormControl id ="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input
@@ -48,7 +119,7 @@ const SignUp = () => {
                     </InputRightElement>
                 </InputGroup>
             </FormControl>
-            <FormControl id ="confirm password" is isRequired>
+            <FormControl id ="confirm password" isRequired>
                 <FormLabel>Confim Password</FormLabel>
                 <InputGroup>
                     <Input
@@ -78,7 +149,10 @@ const SignUp = () => {
                 colorScheme = "red" 
                 width={"100%"} 
                 style={{marginTop : 15}}
-            >
+                color= "white"
+                onClick={SubmitHandler}
+                isLoading={loading}
+            >   
                 Sign Up
             </Button>
             
