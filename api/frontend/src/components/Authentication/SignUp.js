@@ -1,6 +1,9 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react';
-import { useToast } from '@chakra-ui/react'
+
 import React, { useState } from 'react';
+import axios from "axios"
+import { useToast } from '@chakra-ui/react'
+import {useHistory} from "react-router-dom"
 
 const SignUp = () => {
     const [show, setshow] = useState(false);
@@ -12,10 +15,13 @@ const SignUp = () => {
     const [pic, setPic] = useState(null);
     const [loading, setLoading] = useState(false);
     const toast = useToast()
+    const history = useHistory();
 
     const  handleShowClick = () => setshow(!show);
     const  handleConfimClick = () => setshowC(!showC);
+
     const  postDetails = (pics) => {
+
         setLoading(true);
         if(pics === undefined){
             toast({
@@ -31,9 +37,9 @@ const SignUp = () => {
         if (pics.type === "image/jpeg" || pics.type === "image/png") {
             const data = new FormData();
             data.append("file", pics);
-            data.append("upload_preset", "chat-app");
-            data.append("cloud_name", "piyushproj");
-            fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
+            data.append("upload_preset", "chat app");
+            data.append("cloud_name", "dvyqo6xbp");
+            fetch("https://api.cloudinary.com/v1_1/dvyqo6xbp/image/upload", {
               method: "post",
               body: data,
             })
@@ -60,7 +66,7 @@ const SignUp = () => {
           }
     };
 
-    const SubmitHandler = () =>{
+    const SubmitHandler = async () =>{
         setLoading(true);
         if(!name || !email || !password || !confirmPassword){
             toast({
@@ -83,8 +89,40 @@ const SignUp = () => {
                 });
                 return;
         }
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                }
+            }
+            const {data} = await axios.post(
+                "/api/user",
+                {name,email,password,pic},
+                config
+            );
+            toast({
+                title: 'Registration Succesful',
+                status:'success',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom'
+            });
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setLoading(false);
+            history.push("/chat");
+        }catch (error){
+            toast({
+                title: 'ERROR',
+                description: error.response.data.message,
+                status:'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom'
+            });
+            setLoading(false);
+        }
     };
-    
+
     return (
         <VStack spacing='5px'>
             <FormControl id ="firts-name" isRequired>
