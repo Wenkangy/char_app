@@ -1,51 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Box, Container } from '@chakra-ui/react';
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
+import { ChatState } from "../Context/ChatProvider";
+import SideDrawer from "../components/miscellaneous/SideDrawer";
+import MyChats from "../components/MyChats";
+import ChatBox from "../components/ChatBox";
+
 const ChatPages = () => {
-    const [chats, setChats] = useState([]);
-
-    const fetchChats = async () => {
-        try {
-            const { data } = await axios.get("/api/chat");
-            setChats(data);
-        } catch (error) {
-            console.error('Error fetching chats:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchChats();
-    }, []);
+    const { user } = ChatState();
 
     return (
-        //<div>
-            //{
-               // chats.map(chat => <div key={chat.id}>{chat.chatName}</div>)
-            //}
-        //</div>
-        <Container maxW={'xl'} centerContent>
-            <Box 
-            d = "flex"
-            justifyContent="center"
-            p = {3}
-            bg ={"white"}
-            w = "370%"
-            h={"10%"}
-            m="60px 0 15px 0"
-            borderRadius="lg"
-            borderWidth={"1px"}
-            >
-                
+        <div style={{ width: "100%" }}>
+            {user && <SideDrawer />}
+            <Box display="flex" justifyContent="space-between" width="100%" height="91.5vh" padding="10px">
+                {user && <MyChats />}
+                {user && <ChatBox />}
             </Box>
-            <Grid>
-                t
-            </Grid>
-           
-
-        </Container>
+        </div>
     );
 };
 
 export default ChatPages;
-

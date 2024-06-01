@@ -95,8 +95,6 @@ const createGroupChat = asyncHandler(async (req, res) => {
         const fullGroupChat = await Chat.findOne({ _id: groupChat._id })  // Find the chat with the specified id
             .populate("users", "-password")  // Populate the 'users' field, excluding the 'password' field
             .populate("groupAdmin", "-password");  // Populate the 'groupAdmin' field, excluding the 'password' field
-        
-        
 
         res.status(200).json(fullGroupChat);
 

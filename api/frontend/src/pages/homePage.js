@@ -1,10 +1,30 @@
-import React from 'react'
-import {Text, Box, Container} from  "@chakra-ui/react"
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useHistory  } from "react-router";
 import Login from '../components/Authentication/Login'
 import SignUp from '../components/Authentication/SignUp'
 
-const homePage = () => {
+const HomePage = () => {
+
+  const history = useHistory ();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (user) history.push("/chats");
+  }, [history]);
+
+  
+
   return (
     <Container maxW='xl'centerContent>
        <Box
@@ -21,7 +41,7 @@ const homePage = () => {
        >
           <Text fontSize={"4xl"}fontFamily={"Work sands"} color={"black"}> Talk-Live</Text>
        </Box>
-       <Box bg={"white"} p={4} w={"200%"} borderRadius={"lg"} borderwigth ={"1px"} textColor={"black"}>
+       <Box bg={"white"} p={4} w={"200%"} borderRadius={"lg"} borderWidth ={"1px"} textColor={"black"}>
         <Tabs variant={"soft-rounded"} colorScheme='gray'>
         <TabList mb={"1em"}>
           <Tab width={"50%"}>Login</Tab>
@@ -41,4 +61,4 @@ const homePage = () => {
   )
 }
 
-export default homePage
+export default HomePage
