@@ -74,7 +74,7 @@ const fetchChat = asyncHandler(async (req, res) => {
 
 const createGroupChat = asyncHandler(async (req, res) => {
     if (!req.body.users || !req.body.name) {
-        return res.status(400).send({ message: "Please Fill all the feilds" });
+        return res.status(400).send({ message: "Please Fill all the fields" });
       }
     var users = JSON.parse(req.body.users);
     
@@ -89,7 +89,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
             chatName: req.body.name,
             users: users,
             isGroupChat: true,
-            groupAdmin: req.uses,
+            groupAdmin: req.user,
 
         });
         const fullGroupChat = await Chat.findOne({ _id: groupChat._id })  // Find the chat with the specified id
