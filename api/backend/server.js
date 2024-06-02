@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes")
 const charRoutes= require("./routes/chatRoutes")
+const messageRoutes = require("./routes/messageRoutes")
 
 const app = express();
 dotenv.config();
@@ -43,6 +44,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", charRoutes);
+app.use("/api/message", messageRoutes);
 
 app.get("/auth/userName/:userName/pswd/:pswd", (req, res) => {
   if (verify_login(req.params.userName, req.params.pswd)) {

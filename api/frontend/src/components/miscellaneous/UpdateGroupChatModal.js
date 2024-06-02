@@ -24,7 +24,7 @@ import UserBadgeItem from '../UserAvatar/UserBadgeItem';
 import UserListItem from "../UserAvatar/UserListItem";
 import axios from "axios";
 
-const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
+const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState();
@@ -32,7 +32,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [renameloading, setRenameloading] = useState(false);
-    
+    const toast = useToast();
     const handleRemove =async (user1)=>{
       if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
         toast({
@@ -63,7 +63,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
   
         user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
         setFetchAgain(!fetchAgain);
-     
+        fetchMessages();
         setLoading(false);
       } catch (error) {
         toast({
@@ -200,7 +200,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
       }
     };
     
-    const toast = useToast();
+  
 
     const { selectedChat, setSelectedChat, user } = ChatState();
 

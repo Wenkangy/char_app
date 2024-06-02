@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   Input,
-  position,
   useToast,
 } from '@chakra-ui/react'
 import axios from 'axios';
