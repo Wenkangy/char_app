@@ -51,25 +51,24 @@ const accessChat = asyncHandler(async (req, res) => {
     }
 });
 
-const fetchChat = asyncHandler(async (req, res) => {
-    try{
-        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-        .populate("users", "-password")
-        .populate("groupAdmin", "-password")
-        .populate("latestMessage")
-        .sort({ updatedAt: -1 })
-        .then(async (results)=> {
-            results = await User.populate(results, {
-            path: "latestMessage.sender",
-            select: "name pic email"
+const fetchChats = asyncHandler(async (req, res) => {
+  try {
+    Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await User.populate(results, {
+          path: "latestMessage.sender",
+          select: "name pic email",
         });
-        res.status(200).json(results);
-    });
-
-    }catch(error) {
-        res.status(400);
-        throw new Error(error.message);
-    }
+        res.status(200).send(results);
+      });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
 
 const createGroupChat = asyncHandler(async (req, res) => {
@@ -78,7 +77,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
       }
     var users = JSON.parse(req.body.users);
     
-    if (users.length < 2) {
+    if (users.length < 1) {
         return res
           .status(400)
           .send("More than 2 users are required to form a group chat");
@@ -170,4 +169,4 @@ const removeFromGroup = asyncHandler(async (req, res) => {
         }
 });
 
-module.exports = {accessChat , fetchChat, createGroupChat, renameGroup, addToGroup, removeFromGroup};
+module.exports = {accessChat , fetchChats, createGroupChat, renameGroup, addToGroup, removeFromGroup};
