@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes")
 const charRoutes= require("./routes/chatRoutes")
 const messageRoutes = require("./routes/messageRoutes")
+const path = require("path");
 
 const app = express();
 dotenv.config();
@@ -35,17 +36,32 @@ app.use((req, res, next) => {
   next();
 });
 
-/*
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
-  res.send("api running");
-});
-*/
+
 
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", charRoutes);
 app.use("/api/message", messageRoutes);
+
+
+//deployment
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/views/index.html");
+    res.send("api running");
+  });
+}
+
+//deployment
 
 /*app.get("/auth/userName/:userName/pswd/:pswd", (req, res) => {
   if (verify_login(req.params.userName, req.params.pswd)) {
